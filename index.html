@@ -47,7 +47,6 @@
       const frame = document.getElementById('app-frame');
       frame.style.display = 'block';
 
-      // Helper: fetch HTML from a CDN base and inject it into the iframe
       function injectFromBase(baseHref) {
         return fetch(baseHref + 'index.html')
           .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
@@ -59,8 +58,6 @@
           });
       }
 
-      // Try to get the exact latest commit SHA so jsDelivr skips its @latest cache.
-      // Falls back through two safe options if anything goes wrong.
       fetch('https://api.github.com/repos/failedrifle/hamburger/commits/main')
         .then(r => { if (!r.ok) throw new Error(`GitHub API ${r.status}`); return r.json(); })
         .then(data => {
@@ -70,11 +67,9 @@
           return injectFromBase(`https://cdn.jsdelivr.net/gh/failedrifle/hamburger@${sha}/core/library/`);
         })
         .catch(err => {
-          // Fallback 1: jsDelivr @main (refreshes every ~12 min, better than @latest)
           console.warn('SHA fetch failed, trying @main:', err.message);
           return injectFromBase('https://cdn.jsdelivr.net/gh/failedrifle/hamburger@main/core/library/')
             .catch(err2 => {
-              // Fallback 2: GitHub Pages
               console.warn('CDN inject failed, falling back to GitHub Pages:', err2.message);
               frame.src = 'https://failedrifle.github.io/hamburger/core/library/index.html';
             });
