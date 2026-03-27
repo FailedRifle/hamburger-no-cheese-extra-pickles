@@ -28,7 +28,6 @@
   </style>
 </head>
 <body>
-
   <div id="browser-block" style="display:none;">
     <div class="outer">
       <div class="middle" aria-label="RESTRICTED!" title="RESTRICTED!">
@@ -40,28 +39,28 @@
       </div>
     </div>
   </div>
-
   <iframe id="app-frame"></iframe>
-
   <script>
     const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
     if (isPWA) {
       document.title = 'created by mhauber';
       const frame = document.getElementById('app-frame');
       frame.style.display = 'block';
 
-      // Use the library URL
-      const libraryUrl = 'https://cdn.jsdelivr.net/gh/failedrifle/hamburger@latest/core/library/index.html';
-
-      fetch(libraryUrl)
-        .then(response => response.text())
-        .then(html => {
+      fetch('https://api.github.com/repos/failedrifle/hamburger/commits/main')
+        .then(r => r.json())
+        .then(data => {
+          const sha      = data.sha;
+          const baseHref = `https://cdn.jsdelivr.net/gh/failedrifle/hamburger@${sha}/core/library/`;
+          const libUrl   = `${baseHref}index.html`;
+          return fetch(libUrl)
+            .then(r => r.text())
+            .then(html => ({ html, baseHref }));
+        })
+        .then(({ html, baseHref }) => {
           const destDoc = frame.contentWindow.document;
           destDoc.open();
-          // We add a <base> tag so that relative assets inside the fetched HTML load from the correct CDN path
-          const baseTag = `<base href="https://cdn.jsdelivr.net/gh/failedrifle/hamburger@latest/core/library/">`;
-          destDoc.write(baseTag + html);
+          destDoc.write(`<base href="${baseHref}">` + html);
           destDoc.close();
         })
         .catch(err => {
@@ -72,7 +71,6 @@
       document.title = 'RESTRICTED!';
       document.getElementById('browser-block').style.display = 'block';
     }
-
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js')
