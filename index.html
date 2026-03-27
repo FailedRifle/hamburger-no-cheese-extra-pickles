@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Roboto:400,100,700,900" rel="stylesheet" type="text/css">
+  
+  <link href="./blocked.png" rel="icon" type="image/png">
+  <link rel="manifest" href="./manifest.json">
+  
+  <meta name="theme-color" content="#000000">
+  <style>
+    @supports (font: -apple-system-body) { html { font: -apple-system-body; } }
+    html { height: 100%; overflow: hidden; }
+    body { margin: 0; padding: 0; background-color: #3E3E3E; background: radial-gradient(ellipse at center, #707070 13%, #333333 100%); font-family: 'Roboto', sans-serif; height: 100vh; }
+    .outer { display: table; position: absolute; height: 100%; width: 100%; }
+    .middle { display: table-cell; vertical-align: middle; }
+    .content {
+      max-width: 32em; padding: 0 1.25em; margin: 1.875em auto;
+      color: #c7c7c7; text-align: center; font-size: 1.72em; font-weight: 100;
+      height: 22em; background-repeat: no-repeat; background-size: 32%;
+      background-position: center center;
+      background-image: url('./blocked.png');
+    }
+    .content h1 { color: #00AAD7; font-size: 2.5em; margin: 0; margin-bottom: -20px; }
+    iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: none; display: none; }
+  </style>
+</head>
+<body>
 
+  <div id="browser-block" style="display:none;">
+    <div class="outer">
+      <div class="middle" aria-label="cheddar nooooooooooo!" title="RESTRICTED!">
+        <div class="content">
+          <h1><strong>RESTRICTED!</strong></h1>
+          <br />
+          This website has been blocked by Cheddar Hobbs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <iframe id="app-frame"></iframe>
+
+  <script>
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+    if (isPWA) {
+      document.title = 'created by mhauber';
+      const frame = document.getElementById('app-frame');
+      frame.style.display = 'block';
+
+      // Cache-busting URL: adds a unique timestamp to force jsDelivr to fetch the newest version
+      const cacheBuster = new Date().getTime();
+      const libraryUrl = `https://cdn.jsdelivr.net/gh/failedrifle/hamburger@latest/core/library/index.html?v=${cacheBuster}`;
+
+      fetch(libraryUrl, { 
+        cache: "no-store", // Prevents the browser from using a cached version of the fetch
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } 
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('CDN response was not ok');
+          return response.text();
+        })
+        .then(html => {
+          const destDoc = frame.contentWindow.document;
+          destDoc.open();
+          
+          // Injecting <base> tag ensures scripts/styles inside the fetched HTML 
+          // also pull from the @latest version on the CDN.
+          const baseTag = `<base href="https://cdn.jsdelivr.net/gh/failedrifle/hamburger@latest/core/library/">`;
+          destDoc.write(baseTag + html);
+          destDoc.close();
+        })
+        .catch(err => {
+          console.error('Latest library injection failed:', err);
+          frame.src = 'https://failedrifle.github.io/hamburger/core/library/index.html';
+        });
+
+    } else {
+      document.title = 'RESTRICTED!';
+      document.getElementById('browser-block').style.display = 'block';
+    }
+
+    // Service Worker: Register and immediately check for updates
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+          .then(reg => {
+            // Forces the SW to check for a newer script every time you open the app
+            reg.update();
+            console.log('SW registered:', reg.scope);
+          })
+          .catch(err => console.error('SW registration failed:', err));
+      });
+      
+      // Auto-reload the page if a new service worker version is found and activated
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    }
+  </script>
+</body>
+</html>
