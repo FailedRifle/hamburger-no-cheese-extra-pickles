@@ -44,28 +44,20 @@
   <iframe id="app-frame"></iframe>
 
   <script>
-    // --- CONFIGURATION ---
-    // Set to false to hide the "Install" icon in the address bar and block prompts.
-    const isInstallable = false; 
-    // ---------------------
+    const isInstallable = true; 
 
-    // 1. Check if currently running as a PWA
     const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-    // 2. Disable Installation UI if configured to do so
     if (!isInstallable) {
-      // Remove manifest so the browser doesn't show the "Install" icon in the address bar
       const manifest = document.getElementById('pwa-manifest');
       if (manifest) manifest.remove();
 
-      // Prevent the automated "Add to Home Screen" prompt pop-up
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         return false;
       });
     }
 
-    // 3. App Logic
     if (isPWA) {
       document.title = 'created by mhauber';
       const frame = document.getElementById('app-frame');
@@ -99,13 +91,10 @@
             });
         });
     } else {
-      // If not in PWA mode, show the restricted screen
       document.title = 'RESTRICTED!';
       document.getElementById('browser-block').style.display = 'block';
     }
 
-    // 4. Service Worker Registration
-    // Note: We keep this active so existing PWA installs continue to work offline/properly.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js')
