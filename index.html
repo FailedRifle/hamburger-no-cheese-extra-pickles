@@ -44,10 +44,10 @@
   <iframe id="app-frame"></iframe>
 
 <script>
-  const isInstallable = false;
+const isInstallable = false;
   const maintenanceMode = true;
-  const targetWidth = 1000;
-  const targetHeight = 700;
+  const targetWidth = 800;
+  const targetHeight = 500;
 
   const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -62,21 +62,24 @@
 
   if (isPWA) {
     window.resizeTo(targetWidth, targetHeight);
-    
+
     if (maintenanceMode) {
-      document.title = 'Maintenance - CheddarOS';
+      document.body.style.background = "#000000";
+
       const blockScreen = document.getElementById('browser-block');
       const contentDiv = blockScreen.querySelector('.content');
-      const header = blockScreen.querySelector('h1');
-
-      header.innerHTML = "<strong>MAINTENANCE</strong>";
-      contentDiv.innerHTML = header.outerHTML + "<br />CheddarOS is currently undergoing maintenance. Check back soon!";
       
-      contentDiv.style.backgroundImage = "none"; 
-      contentDiv.insertAdjacentHTML('afterbegin', '<div style="font-size:100px; margin-bottom:20px;">🧀</div>');
+      contentDiv.style.backgroundImage = "none";
       
+      let maintenanceHTML = "<h1><strong>maintenance</strong></h1>";
+      maintenanceHTML += "<br />cheddar cheddar is currently broken cause im an idiot";
+      maintenanceHTML += '<div style="font-size:100px; margin-top:30px;">🧀</div>'; 
+      
+      contentDiv.innerHTML = maintenanceHTML;
       blockScreen.style.display = 'block';
+
     } else {
+      document.title = 'created by mhauber';
       const frame = document.getElementById('app-frame');
       frame.style.display = 'block';
 
