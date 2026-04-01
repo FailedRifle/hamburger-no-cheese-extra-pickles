@@ -43,23 +43,40 @@
 
   <iframe id="app-frame"></iframe>
 
-  <script>
-    const isInstallable = false; 
+<script>
+  const isInstallable = false;
+  const maintenanceMode = true;
+  const targetWidth = 200;
+  const targetHeight = 200;
 
-    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-    if (!isInstallable) {
-      const manifest = document.getElementById('pwa-manifest');
-      if (manifest) manifest.remove();
+  if (!isInstallable) {
+    const manifest = document.getElementById('pwa-manifest');
+    if (manifest) manifest.remove();
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      return false;
+    });
+  }
 
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        return false;
-      });
-    }
+  if (isPWA) {
+    window.resizeTo(targetWidth, targetHeight);
+    
+    if (maintenanceMode) {
+      document.title = 'Maintenance - CheddarOS';
+      const blockScreen = document.getElementById('browser-block');
+      const contentDiv = blockScreen.querySelector('.content');
+      const header = blockScreen.querySelector('h1');
 
-    if (isPWA) {
-      document.title = 'created by mhauber';
+      header.innerHTML = "<strong>MAINTENANCE</strong>";
+      contentDiv.innerHTML = header.outerHTML + "<br />CheddarOS is currently undergoing maintenance. Check back soon!";
+      
+      contentDiv.style.backgroundImage = "none"; 
+      contentDiv.insertAdjacentHTML('afterbegin', '<div style="font-size:100px; margin-bottom:20px;">🧀</div>');
+      
+      blockScreen.style.display = 'block';
+    } else {
       const frame = document.getElementById('app-frame');
       frame.style.display = 'block';
 
@@ -79,29 +96,27 @@
         .then(data => {
           const sha = data && data.sha;
           if (!sha) throw new Error('SHA missing from API response');
-          console.log('Loading CheddarOS at commit:', sha);
           return injectFromBase(`https://cdn.jsdelivr.net/gh/failedrifle/hamburger@${sha}/core/library/`);
         })
         .catch(err => {
-          console.warn('SHA fetch failed, trying @main:', err.message);
           return injectFromBase('https://cdn.jsdelivr.net/gh/failedrifle/hamburger@main/core/library/')
             .catch(err2 => {
-              console.warn('CDN inject failed, falling back to GitHub Pages:', err2.message);
               frame.src = 'https://failedrifle.github.io/hamburger/core/library/index.html';
             });
         });
-    } else {
-      document.title = 'RESTRICTED!';
-      document.getElementById('browser-block').style.display = 'block';
     }
+  } else {
+    document.title = 'RESTRICTED!';
+    document.getElementById('browser-block').style.display = 'block';
+  }
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(reg => console.log('SW registered:', reg.scope))
-          .catch(err => console.error('SW failed:', err));
-      });
-    }
-  </script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.error('SW failed'));
+    });
+  }
+</script>
 </body>
 </html>
