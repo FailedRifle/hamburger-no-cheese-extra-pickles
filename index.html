@@ -64,22 +64,21 @@ const isInstallable = false;
     window.resizeTo(targetWidth, targetHeight);
 
     if (maintenanceMode) {
-      document.body.style.background = "#000000";
+      document.body.style.background = "#131313";
 
       const blockScreen = document.getElementById('browser-block');
       const contentDiv = blockScreen.querySelector('.content');
       
       contentDiv.style.backgroundImage = "none";
       
-      let maintenanceHTML = "<h1><strong>maintenance</strong></h1>";
-      maintenanceHTML += "<br />cheddar cheddar is currently broken cause im an idiot";
+      let maintenanceHTML = "<h1><strong>error: ched</strong></h1>";
+      maintenanceHTML += "<br />cheddar is currently broken cause im an idiot";
       maintenanceHTML += '<div style="font-size:100px; margin-top:30px;">🧀</div>'; 
       
       contentDiv.innerHTML = maintenanceHTML;
       blockScreen.style.display = 'block';
 
     } else {
-      document.title = 'created by mhauber';
       const frame = document.getElementById('app-frame');
       frame.style.display = 'block';
 
