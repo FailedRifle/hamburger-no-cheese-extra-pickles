@@ -155,7 +155,6 @@
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
-    /* ── INSTALL CARD ── */
     #install-result { display: none; margin-bottom: 28px; }
 
     .install-btn-bar {
@@ -243,7 +242,6 @@
 <div class="body">
   <div class="results-col">
 
-    <!-- Result 1: Google for Education -->
     <div class="result">
       <div class="result-source">
         <div class="favicon">
@@ -290,7 +288,6 @@
       </div>
     </div>
 
-    <!-- Result 2: SitesWiki -->
     <div class="result">
       <div class="result-source">
         <div class="siteswiki-favicon">S</div>
@@ -306,7 +303,6 @@
       </div>
     </div>
 
-    <!-- Result 3: Google Help -->
     <div class="result">
       <div class="result-source">
         <div class="favicon">
@@ -326,7 +322,6 @@
       </div>
     </div>
 
-    <!-- Result 4: Google Play -->
     <div class="result">
       <div class="result-source">
         <div class="play-favicon">
@@ -344,7 +339,6 @@
       </div>
     </div>
 
-    <!-- Install Card — only visible when isInstallable = true -->
     <div class="result" id="install-result">
       <div class="result-source">
         <div class="cheese-favicon">🧀</div>
@@ -369,20 +363,17 @@
 </div>
 
 <script>
-  const isInstallable = false; // set false to hide install card AND suppress browser install button
+  const isInstallable = true;
   const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   const installResult = document.getElementById('install-result');
   const installBtn    = document.getElementById('install-btn');
   let deferredPrompt;
 
-  // Hide install card immediately; only show if isInstallable = true
   installResult.style.display = 'none';
 
   if (!isInstallable) {
-    // Remove manifest so browser never offers install prompt
     const manifest = document.getElementById('pwa-manifest');
     if (manifest) manifest.remove();
-    // Suppress any install prompt that might still fire
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); });
   }
 
