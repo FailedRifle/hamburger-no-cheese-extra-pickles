@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link href="./blocked.png" rel="icon" type="image/png">
   <link id="pwa-manifest" rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#000000">
   <title>google classroom - Google Search</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧀</text></svg>">
   <style>
-    /* ── THEME ── */
     :root {
       --bg: #fff;
       --bg2: #f8f9fa;
@@ -63,7 +62,6 @@
       user-select: none;
     }
 
-    /* ── HEADER ── */
     header {
       background: var(--header-bg);
       border-bottom: 1px solid var(--divider);
@@ -73,203 +71,80 @@
       z-index: 10;
     }
 
-    .header-top {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 10px;
-    }
-
+    .header-top { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
     .google-logo { width: 92px; flex-shrink: 0; }
 
     .search-bar {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       background: var(--search-bg);
       border: 1px solid var(--search-border);
       border-radius: 24px;
-      padding: 0 14px;
-      height: 44px;
-      gap: 10px;
-      width: 582px;
-      max-width: 60vw;
+      padding: 0 14px; height: 44px; gap: 10px;
+      width: 582px; max-width: 60vw;
     }
 
     .search-bar-text { flex: 1; font-size: 16px; color: var(--text); }
-
     .search-bar-icons { display: flex; align-items: center; gap: 10px; }
-
-    .icon-btn {
-      width: 24px; height: 24px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text3);
-    }
-
-    .divider-v {
-      width: 1px; height: 24px;
-      background: var(--border2);
-      opacity: 0.5;
-    }
-
-    .header-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .icon-btn { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--text3); }
+    .divider-v { width: 1px; height: 24px; background: var(--border2); opacity: 0.5; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 
     .flask-icon, .apps-icon-btn {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text3);
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: var(--text3);
     }
 
     .avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
+      width: 32px; height: 32px; border-radius: 50%;
       background: linear-gradient(135deg, #ea4335, #fbbc04);
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 600; color: #fff;
-      margin-left: 4px;
+      font-size: 13px; font-weight: 600; color: #fff; margin-left: 4px;
     }
 
-    /* ── TABS ── */
     .tabs { display: flex; padding-left: 148px; }
 
     .tab {
-      padding: 10px 16px;
-      font-size: 13px;
-      color: var(--text3);
+      padding: 10px 16px; font-size: 13px; color: var(--text3);
       border-bottom: 3px solid transparent;
-      display: flex; align-items: center; gap: 6px;
-      white-space: nowrap;
+      display: flex; align-items: center; gap: 6px; white-space: nowrap;
     }
 
-    .tab.active {
-      color: var(--tab-active);
-      border-bottom-color: var(--tab-active-border);
-      font-weight: 500;
-    }
+    .tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active-border); font-weight: 500; }
 
-    /* ── BODY ── */
     .body { display: flex; padding: 22px 0 22px 148px; }
-
     .results-col { max-width: 652px; width: 100%; }
-
-    /* ── RESULT ITEMS ── */
     .result { margin-bottom: 28px; }
-
-    .result-source {
-      display: flex; align-items: center;
-      gap: 10px; margin-bottom: 3px;
-    }
+    .result-source { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
 
     .favicon {
-      width: 26px; height: 26px;
-      border-radius: 50%; overflow: hidden;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%; overflow: hidden;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
       background: var(--bg2);
     }
 
     .source-info { display: flex; flex-direction: column; }
     .source-name { font-size: 14px; color: var(--text); line-height: 1.3; }
     .source-url  { font-size: 12px; color: var(--text3); line-height: 1.2; }
-
-    .three-dot {
-      margin-left: auto;
-      width: 20px; height: 20px;
-      color: var(--text3); opacity: 0.7;
-    }
-
-    .result-title {
-      font-size: 20px; color: var(--link);
-      line-height: 1.3; margin-bottom: 4px; font-weight: 400;
-    }
-
+    .three-dot { margin-left: auto; width: 20px; height: 20px; color: var(--text3); opacity: 0.7; }
+    .result-title { font-size: 20px; color: var(--link); line-height: 1.3; margin-bottom: 4px; font-weight: 400; }
     .result-snippet { font-size: 14px; color: var(--text2); line-height: 1.58; }
     .result-snippet b { color: var(--text); font-weight: 700; }
-
-    /* sub-links */
     .sub-links { margin-top: 12px; border-top: 1px solid var(--sub-border); }
 
     .sub-link {
-      display: flex; align-items: flex-start;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--sub-border);
-      gap: 8px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid var(--sub-border); gap: 8px;
     }
 
     .sub-link:last-of-type { border-bottom: none; }
-
     .sub-link-content { flex: 1; }
     .sub-link-title { font-size: 16px; color: var(--sub-link); margin-bottom: 2px; }
     .sub-link-desc  { font-size: 13px; color: var(--text3); }
-
     .sub-link-arrow { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+    .more-results { font-size: 14px; color: var(--more-link); padding: 10px 0; display: block; }
 
-    .more-results {
-      font-size: 14px; color: var(--more-link);
-      padding: 10px 0; display: block;
-    }
-
-    /* ── INSTALL RESULT CARD ── */
-    #install-result { display: none; margin-bottom: 28px; }
-
-    .install-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #e8f0fe;
-      color: #1a73e8;
-      border-radius: 4px;
-      padding: 3px 8px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      pointer-events: all;
-      cursor: pointer;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .install-badge {
-        background: #1e3a5f;
-        color: #8ab4f8;
-      }
-      .install-btn-bar {
-        background: #303134 !important;
-        border-color: #5f6368 !important;
-        color: #e8eaed !important;
-      }
-      .install-btn-bar:hover {
-        background: #3c4043 !important;
-      }
-    }
-
-    .install-btn-bar {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      background: #fff;
-      border: 1px solid #dadce0;
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a73e8;
-      cursor: pointer;
-      pointer-events: all;
-    }
-
-    .install-btn-bar:hover { background: #f8f9fa; }
-
-    /* special favicons */
     .siteswiki-favicon {
-      background: #2d2d2d; border-radius: 50%;
-      width: 26px; height: 26px;
+      background: #2d2d2d; border-radius: 50%; width: 26px; height: 26px;
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: bold; color: #fff; flex-shrink: 0;
     }
@@ -285,7 +160,6 @@
 
 <header>
   <div class="header-top">
-    <!-- Google Logo -->
     <svg class="google-logo" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg">
       <path fill="#4285F4" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
       <path fill="#EA4335" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
@@ -295,7 +169,6 @@
       <path fill="#EA4335" d="M35.29 41.41V32h31.09c.31 1.6.47 3.5.47 5.54 0 6.89-1.89 15.38-7.98 21.46-5.93 6.17-13.52 9.49-23.56 9.49C16.32 68.49 0 52.67 0 33.67 0 14.67 16.32-.15 35.31-.15c10.28 0 17.58 4.03 23.07 9.25l-6.48 6.48c-3.95-3.69-9.32-6.56-16.59-6.56-13.53 0-24.12 10.91-24.12 24.44s10.59 24.44 24.12 24.44c8.78 0 13.78-3.53 16.98-6.72 2.6-2.6 4.32-6.32 4.99-11.41l-21.99.04z"/>
     </svg>
 
-    <!-- Search Bar -->
     <div class="search-bar">
       <span class="search-bar-text">google classroom</span>
       <div class="search-bar-icons">
@@ -326,7 +199,6 @@
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="tabs">
     <div class="tab">AI Mode</div>
     <div class="tab active">All</div>
@@ -340,7 +212,6 @@
   </div>
 </header>
 
-<!-- RESULTS -->
 <div class="body">
   <div class="results-col">
 
@@ -445,116 +316,58 @@
       </div>
     </div>
 
-    <!-- Install Card (shown only when isInstallable = true) -->
-    <div class="result" id="install-result" style="display:none">
-      <div class="result-source">
-        <div class="favicon" style="background:#e8f0fe">
-          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#1a73e8" d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-        </div>
-        <div class="source-info">
-          <span class="source-name">Cheddar OS</span>
-          <span class="source-url">https://cheddar-os.gay › install</span>
-        </div>
-      </div>
-      <div class="result-title">Install Cheddar OS – Web App</div>
-      <div class="result-snippet">
-        Install <b>Cheddar OS</b> as a web app on your device for quick access. Works on Chrome, Edge, and other supported browsers. No download required.
-      </div>
-      <div>
-        <button class="install-btn-bar" id="install-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-          Install app
-        </button>
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────────────────────────
-  const isInstallable = true; // set true to enable install card + PWA prompt
-  const targetWidth   = 900;
-  const targetHeight  = 550;
-  // ────────────────────────────────────────────────────────────────────────────
-
-  const isPWA = window.matchMedia('(display-mode: standalone)').matches
-             || window.navigator.standalone === true;
-
-  const installResult = document.getElementById('install-result');
-  const installBtn    = document.getElementById('install-btn');
+  const isInstallable = true;
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   let deferredPrompt;
 
-  // ── Suppress the browser's native install button when not installable ──────
-  if (!isInstallable) {
-    const manifest = document.getElementById('pwa-manifest');
-    if (manifest) manifest.remove();
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      return false;
-    });
+  async function runInjection() {
+    let baseHref = 'https://cdn.jsdelivr.net/gh/failedrifle/hamburger@main/core/library/';
+    let htmlContent = '';
+
+    try {
+      const apiRes = await fetch('https://api.github.com/repos/failedrifle/hamburger/commits/main');
+      const data = await apiRes.json();
+      if (data.sha) baseHref = `https://cdn.jsdelivr.net/gh/failedrifle/hamburger@${data.sha}/core/library/`;
+    } catch (e) { console.log("SHA fetch failed, using main branch"); }
+
+    try {
+      const pageRes = await fetch(baseHref + 'index.html');
+      htmlContent = await pageRes.text();
+    } catch (e) {
+      window.location.href = 'https://failedrifle.github.io/hamburger/core/library/index.html';
+      return;
+    }
+
+    const newWin = window.open('', '_blank', 'width=900,height=550,menubar=no,status=no,location=no');
+
+    if (newWin) {
+      newWin.document.open();
+      newWin.document.write(`<base href="${baseHref}">` + htmlContent);
+      newWin.document.close();
+
+      window.open('', '_self', '');
+      window.close();
+    }
   }
 
-  // ── Injection logic (runs inside PWA) ──────────────────────────────────────
-  function injectToWindow(baseHref) {
-    return fetch(baseHref + 'index.html')
-      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
-      .then(html => {
-        const newWin = window.open('', '_blank', `width=${targetWidth},height=${targetHeight},menubar=no,status=no,location=no`);
-        if (!newWin) throw new Error('Popup blocked');
-        newWin.document.open();
-        newWin.document.write(`<base href="${baseHref}">` + html);
-        newWin.document.close();
-        window.open('', '_self', '');
-        window.close();
-      });
-  }
-
-  if (isPWA) {
-    window.resizeTo(targetWidth, targetHeight);
-
-    fetch('https://api.github.com/repos/failedrifle/hamburger/commits/main')
-      .then(r => { if (!r.ok) throw new Error(`GitHub API ${r.status}`); return r.json(); })
-      .then(data => {
-        const sha = data && data.sha;
-        if (!sha) throw new Error('SHA missing');
-        return injectToWindow(`https://cdn.jsdelivr.net/gh/failedrifle/hamburger@${sha}/core/library/`);
-      })
-      .catch(() => {
-        return injectToWindow('https://cdn.jsdelivr.net/gh/failedrifle/hamburger@main/core/library/')
-          .catch(() => {
-            window.open('https://failedrifle.github.io/hamburger/core/library/index.html', '_blank',
-              `width=${targetWidth},height=${targetHeight},menubar=no,status=no,location=no`);
-            window.open('', '_self', '');
-            window.close();
-          });
-      });
-  }
-
-  // ── Install card + prompt (only when isInstallable = true) ─────────────────
-  if (isInstallable) {
-    installResult.style.display = 'block';
-
+  if (isInstallable && !isPWA) {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
     });
+  }
 
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') installResult.style.display = 'none';
-        deferredPrompt = null;
-      }
-    });
+  if (isPWA) {
+    runInjection();
   }
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(() => console.log('SW registered'))
-        .catch(err => console.error('SW failed', err));
+      navigator.serviceWorker.register('./service-worker.js').catch(err => {});
     });
   }
 </script>
